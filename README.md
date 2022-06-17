@@ -4,9 +4,9 @@ This action prints "Hello World" or "Hello" + the name of a person to greet to t
 
 ## Inputs
 
-## `who-to-greet`
+## `files`
 
-**Required** The name of the person to greet. Default `"World"`.
+**Required** used to get the folders to check.
 
 ## Outputs
 
@@ -16,6 +16,7 @@ The time we greeted you.
 
 ## Example usage
 
-uses: bgdsh/kustomize-check-action:latest
-with:
-  who-to-greet: 'Mona the Octocat'
+
+- uses: bgdsh/kustomize-check-action:latest
+  with:
+    files: {{ steps.changed-files.outputs.all_changed_files }}
