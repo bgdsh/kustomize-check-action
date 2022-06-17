@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+kustomize_version=3.0.0
+
 echo "getting download url for kustomize ${kustomize_version}"
 for i in {1..100}; do
     url=$(curl -s "https://api.github.com/repos/kubernetes-sigs/kustomize/releases?per_page=100&page=$i" | jq -r '.[].assets[] | select(.browser_download_url | test("kustomize(_|.)?(v)?'$kustomize_version'_linux_amd64"))  | .browser_download_url')
