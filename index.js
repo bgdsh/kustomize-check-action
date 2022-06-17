@@ -2,6 +2,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const {execFileSync} = require('child_process')
+const path = require('path')
 
 try {
   // `files` input defined in action metadata file
@@ -12,7 +13,7 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
-  const result = execFileSync('../install_kustomize.sh');
+  const result = execFileSync(path.join(__dirname, '../install_kustomize.sh'));
   console.log(`install kustomize result: ${result.toString('utf-8')}`)
 } catch (error) {
   core.setFailed(error.message);

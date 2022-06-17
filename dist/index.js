@@ -9003,6 +9003,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(1590);
 const github = __nccwpck_require__(5824);
 const {execFileSync} = __nccwpck_require__(2081)
+const path = __nccwpck_require__(1017)
 
 try {
   // `files` input defined in action metadata file
@@ -9013,7 +9014,7 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
-  const result = execFileSync('../install_kustomize.sh');
+  const result = execFileSync(path.join(__dirname, '../install_kustomize.sh'));
   console.log(`install kustomize result: ${result.toString('utf-8')}`)
 } catch (error) {
   core.setFailed(error.message);
