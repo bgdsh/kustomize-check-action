@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-kustomize_version=3.0.0
+export kustomize_version=4.5.5
 
 echo "getting download url for kustomize ${kustomize_version}"
 for i in {1..100}; do
