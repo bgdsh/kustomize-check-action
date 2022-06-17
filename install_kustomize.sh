@@ -32,3 +32,4 @@ fi
 echo "Successfully added execute privilege to kustomize."
 ./kustomize
 pwd
+ls -al
