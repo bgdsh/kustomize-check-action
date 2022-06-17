@@ -12,7 +12,7 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
-  const result = execFileSync('./install_kustomize.sh');
+  const result = execFileSync('../install_kustomize.sh');
   console.log(`install kustomize result: ${result.toString('utf-8')}`)
 } catch (error) {
   core.setFailed(error.message);
