@@ -16,7 +16,8 @@ The time we greeted you.
 
 ## Example usage
 
-
+```yaml
 - uses: bgdsh/kustomize-check-action:latest
   with:
     files: {{ steps.changed-files.outputs.all_changed_files }}
+```
