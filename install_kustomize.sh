@@ -31,3 +31,4 @@ if [ "${?}" -ne 0 ]; then
 fi
 echo "Successfully added execute privilege to kustomize."
 ./kustomize
+pwd
