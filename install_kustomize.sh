@@ -13,9 +13,9 @@ done
 
 echo "Downloading kustomize v${kustomize_version}"
 if [[ "${url}" =~ .tar.gz$ ]]; then
-    curl -s -S -L ${url} | tar -xz -C /usr/bin
+    curl -s -S -L ${url} | tar -xz -C .
 else
-    curl -s -S -L ${url} -o /usr/bin/kustomize
+    curl -s -S -L ${url} -o ./kustomize
 fi
 if [ "${?}" -ne 0 ]; then
     echo "Failed to download kustomize v${kustomize_version}."
@@ -24,9 +24,10 @@ fi
 echo "Successfully downloaded kustomize v${kustomize_version}."
 
 echo "Allowing execute privilege to kustomize."
-chmod +x /usr/bin/kustomize
+chmod +x ./kustomize
 if [ "${?}" -ne 0 ]; then
     echo "Failed to update kustomize privilege."
     exit 1
 fi
 echo "Successfully added execute privilege to kustomize."
+./kustomize
