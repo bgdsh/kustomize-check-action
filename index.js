@@ -16,7 +16,7 @@ function checkObjs(allResources, objs) {
     if (!labels || !labels['maintainer']) {
       throw new Error('maintainer should be specified in labels of deployment or commonLabels')
     }
-    if (!allResources['maintainer'].includes(labels['maintainer'])) {
+    if (!allResources['maintainers'].includes(labels['maintainer'])) {
       throw new Error(`maintainer ${labels['maintainer']} is not specified in all_resource.yaml`)
     }
     if (!annotations || !annotations['data_in'] || !annotations['data_out']) {
