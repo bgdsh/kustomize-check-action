@@ -9014,7 +9014,8 @@ const fs = __nccwpck_require__(3292);
 const {execFileSync, execSync} = __nccwpck_require__(2081)
 const path = __nccwpck_require__(1017)
 
-try {
+
+async function process() {
   // `files` input defined in action metadata file
   const filesChanged = core.getInput('filesChanged');
   const foldersToCheck = core.getInput('foldersToCheck');
@@ -9047,7 +9048,7 @@ try {
       let folderParts = fileChanged.split('/');
       folderParts.pop()
       for (;;) {
-        const filesInFolder = fs.readdir(folderParts.join('/'));
+        const filesInFolder = await fs.readdir(folderParts.join('/'));
         if (
           filesInFolder.includes('kustomization.yaml') || 
           filesInFolder.includes('kustomization.yml')
@@ -9078,9 +9079,16 @@ try {
   console.log(`The event payload: ${payload}`);
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
-} catch (error) {
-  core.setFailed(error.message);
 }
+
+(async () => {
+  try {
+    await process()
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+})();
+
 })();
 
 module.exports = __webpack_exports__;
