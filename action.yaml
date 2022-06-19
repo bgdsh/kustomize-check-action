@@ -1,10 +1,13 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  files:  # id of input
+  filesChanged:  # id of input
     description: 'files changed'
     required: true
     default: 'none'
+  foldersToCheck:
+    description: 'folders to check, separated by ,'
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'
