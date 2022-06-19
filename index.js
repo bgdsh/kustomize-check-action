@@ -35,7 +35,8 @@ try {
     let foldersToHandle = [];
     for (const fileChanged of arrFiles) {
       // turn a/b/c/d.txt => ['a', 'b', 'c']
-      let folderParts = fileChanged.split('/').pop();
+      let folderParts = fileChanged.split('/');
+      folderParts.pop()
       for (;;) {
         const filesInFolder = fs.readdir(folderParts.join('/'));
         if (
