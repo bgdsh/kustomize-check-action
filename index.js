@@ -4,7 +4,40 @@ const github = require('@actions/github');
 const fs = require('fs/promises');
 const {execFileSync, execSync} = require('child_process')
 const path = require('path')
+const Yaml = require('yaml')
 
+function checkObjs(allResources, objs) {
+  for (const obj of objs) {
+    // only check deployment for now
+    if (obj['kind']!=='Deployment') {
+      return;
+    }
+    const {labels, annotations} = obj.metadata;
+    if (!labels || !labels['maintainer']) {
+      throw new Error('maintainer should be specified in labels of deployment or commonLabels')
+    }
+    if (!allResources['maintainer'].includes(labels['maintainer'])) {
+      throw new Error(`maintainer ${labels['maintainer']} is not specified in all_resource.yaml`)
+    }
+    if (!annotations || !annotations['data_in'] || !annotations['data_out']) {
+      throw new Error('data_in and data_out should be specified in annotations of deployment');
+    }
+    const data_in_out = [...annotations['data_in'], ...annotations['data_out']];
+    for (let item in data_in_out) {
+      const parts = item.split('.')
+      let resource = allResources;
+      for (const part of parts) {
+        if (!resource) {
+          throw new Error(`resource ${item} is not found in all_resources, please extend`)
+        }
+        resource = resource[part]
+        if (resource === undefined) {
+          throw new Error(`resource ${item} is not found in all_resources`)
+        }
+      }
+    }
+  }
+}
 
 async function process() {
   // `files` input defined in action metadata file
@@ -57,10 +90,16 @@ async function process() {
       }
     }
     console.log('kustomization folders to check: %j', foldersToHandle)
+    let resourcesYaml = await fs.readFile('all_resources.yaml', 'utf-8')
+    const allResources = Yaml.parse(resourcesYaml);
     for (const folderToHandle of foldersToHandle) {
       const buildResult = execSync(`./kustomize build ${folderToHandle}`)
-      console.log(`build result of folder ${folderToHandle} \n${buildResult}`)
+      console.log(`build result of folder ${folderToHandle} \n${buildResult}\n`)
       // TODO: check data_input and data_output
+      const yamlObjs = Yaml
+        .parseAllDocuments(buildResult.toString('utf-8'))
+        .map(doc => doc.toJS())
+      checkObjs(allResources, yamlObjs)
     }
   }
 
