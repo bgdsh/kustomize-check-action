@@ -22,7 +22,10 @@ function checkObjs(allResources, objs) {
     if (!annotations || !annotations['data_in'] || !annotations['data_out']) {
       throw new Error('data_in and data_out should be specified in annotations of deployment');
     }
-    const data_in_out = [...annotations['data_in'], ...annotations['data_out']];
+    const data_in_out = [
+      ...(annotations['data_in'].trim().split(',')), 
+      ...(annotations['data_out'].trim().split(','))
+    ];
     for (let item in data_in_out) {
       const parts = item.split('.')
       let resource = allResources;
