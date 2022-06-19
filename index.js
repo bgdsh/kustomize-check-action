@@ -25,7 +25,8 @@ function checkObjs(allResources, objs) {
     const data_in_out = [
       ...(annotations['data_in'].trim().split(',')), 
       ...(annotations['data_out'].trim().split(','))
-    ];
+    ].filter(item => !!item);
+    console.log("data in and out: %j", data_in_out)
     for (let item in data_in_out) {
       const parts = item.split('.')
       let resource = allResources;
