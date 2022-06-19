@@ -9065,10 +9065,10 @@ async function process() {
         }
       }
     }
-    console.log('kustomization folders to check: %j', foldersToCheck)
-    for (const folderToCheck of foldersToCheck) {
-      const buildResult = execSync(`./kustomize build ${folderToCheck}`)
-      console.log(`build result of folder ${folderToCheck} \n${buildResult}`)
+    console.log('kustomization folders to check: %j', foldersToHandle)
+    for (const folderToHandle of foldersToHandle) {
+      const buildResult = execSync(`./kustomize build ${folderToHandle}`)
+      console.log(`build result of folder ${folderToHandle} \n${buildResult}`)
       // TODO: check data_input and data_output
     }
   }
