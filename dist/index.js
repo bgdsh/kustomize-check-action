@@ -17310,8 +17310,8 @@ const Yaml = __nccwpck_require__(8141)
 function checkObjs(allResources, objs) {
   for (const obj of objs) {
     // only check deployment for now
-    if (obj['kind']!=='Deployment') {
-      return;
+    if (obj['kind'] !== 'Deployment') {
+      continue;
     }
     const {labels, annotations} = obj.metadata;
     if (!labels || !labels['maintainer']) {
