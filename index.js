@@ -18,7 +18,7 @@ try {
       }
       return item
     });
-  const arrFiles = files.split(' ')
+  const arrFiles = filesChanged.split(' ')
     .map(item => item.trim())
     .filter(item => {
       // only check the none base files
