@@ -17313,15 +17313,16 @@ function checkObjs(allResources, objs) {
     if (obj['kind'] !== 'Deployment') {
       continue;
     }
-    const {labels, annotations} = obj.metadata;
+    
+    const {labels, annotations, name} = obj.metadata;
     if (!labels || !labels['maintainer']) {
-      throw new Error('maintainer should be specified in labels of deployment or commonLabels')
+      throw new Error('maintainer should be specified in labels of deployment or commonLabels, but not found in ' + name)
     }
     if (!allResources['maintainers'].includes(labels['maintainer'])) {
-      throw new Error(`maintainer ${labels['maintainer']} is not specified in all_resource.yaml`)
+      throw new Error(`maintainer ${labels['maintainer']} specified in ${name} is not specified in all_resource.yaml`)
     }
     if (!annotations || !annotations['data_in'] || !annotations['data_out']) {
-      throw new Error('data_in and data_out should be specified in annotations of deployment');
+      throw new Error('data_in and data_out should be specified in annotations of deployment, but not found in ' + name);
     }
     const data_in_out = [
       ...(annotations['data_in'].trim().split(',')), 
@@ -17333,11 +17334,11 @@ function checkObjs(allResources, objs) {
       let resource = allResources;
       for (const part of parts) {
         if (!resource) {
-          throw new Error(`resource ${item} is not found in all_resources, please extend`)
+          throw new Error(`resource ${item} used in ${name} is not found in all_resources, please extend`)
         }
         resource = resource[part]
         if (resource === undefined) {
-          throw new Error(`resource ${item} is not found in all_resources`)
+          throw new Error(`resource ${item} used in ${name} is not found in all_resources`)
         }
       }
     }
