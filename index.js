@@ -2,7 +2,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs/promises');
-const {execFileSync, execSync} = require('child_process')
+const { execFileSync, execSync } = require('child_process')
 const path = require('path')
 const Yaml = require('yaml')
 
@@ -12,8 +12,8 @@ function checkObjs(allResources, objs) {
     if (obj['kind'] !== 'Deployment') {
       continue;
     }
-    
-    const {labels, annotations, name} = obj.metadata;
+
+    const { labels, annotations, name } = obj.metadata;
     if (!labels || !labels['maintainer']) {
       throw new Error('maintainer should be specified in labels of deployment or commonLabels, but not found in ' + name)
     }
@@ -24,8 +24,8 @@ function checkObjs(allResources, objs) {
       throw new Error('data_in and data_out should be specified in annotations of deployment, but not found in ' + name);
     }
     const data_in_out = [
-      ...(annotations['data_in'].trim().split(',')), 
-      ...(annotations['data_out'].trim().split(','))
+      ...(annotations['data_in'].trim().split(',').map(item => item.trim())),
+      ...(annotations['data_out'].trim().split(',').map(item => item.trim())),
     ].filter(item => !!item);
     console.log("data in and out: %j", data_in_out)
     for (let item of data_in_out) {
@@ -52,7 +52,7 @@ async function process() {
   const folderPrefixes = foldersToCheck.split(',')
     .map(item => item.trim())
     .map(item => {
-      if(item.startsWith('/')) {
+      if (item.startsWith('/')) {
         return item.substring(1)
       }
       return item
@@ -76,10 +76,10 @@ async function process() {
       // turn a/b/c/d.txt => ['a', 'b', 'c']
       let folderParts = fileChanged.split('/');
       folderParts.pop()
-      for (;;) {
+      for (; ;) {
         const filesInFolder = await fs.readdir(folderParts.join('/'));
         if (
-          filesInFolder.includes('kustomization.yaml') || 
+          filesInFolder.includes('kustomization.yaml') ||
           filesInFolder.includes('kustomization.yml')
         ) {
           const folderToHandle = folderParts.join('/');
