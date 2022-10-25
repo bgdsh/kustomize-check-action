@@ -9,19 +9,19 @@ const Yaml = require('yaml')
 function checkObjs(allResources, objs) {
   for (const obj of objs) {
     // only check deployment for now
-    if (obj['kind'] !== 'Deployment') {
+    if (obj['kind'] !== 'Deployment' || obj['kind'] !== 'CronJob')  {
       continue;
     }
 
     const { labels, annotations, name } = obj.metadata;
     if (!labels || !labels['maintainer']) {
-      throw new Error('maintainer should be specified in labels of deployment or commonLabels, but not found in ' + name)
+      throw new Error('maintainer should be specified in labels of deployment/cronjob or commonLabels, but not found in ' + name)
     }
     if (!allResources['maintainers'].includes(labels['maintainer'])) {
       throw new Error(`maintainer ${labels['maintainer']} specified in ${name} is not specified in all_resource.yaml`)
     }
     if (!annotations || !annotations['data_in'] || !annotations['data_out']) {
-      throw new Error('data_in and data_out should be specified in annotations of deployment, but not found in ' + name);
+      throw new Error('data_in and data_out should be specified in annotations of deployment/cronjob, but not found in ' + name);
     }
     const data_in_out = [
       ...(annotations['data_in'].trim().split(',').map(item => item.trim())),
